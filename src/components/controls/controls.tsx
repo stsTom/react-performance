@@ -1,6 +1,6 @@
 import { memo } from "react"
 import { SearchBar } from "../search-bar/search-bar"
-import { YearSelector } from "../year-selector/year-selector"
+import YearSelector from "../year-selector/year-selector"
 
 import styles from './controls.module.css'
 

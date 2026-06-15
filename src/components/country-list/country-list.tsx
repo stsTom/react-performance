@@ -50,34 +50,34 @@ const CountryList = memo(function CountryList({
   sortOrder,
 }: CountryListProps) {
   const filteredCountries = useMemo(() => {
-    const filtered = countries
-      .filter((c) => {
-        const matchesSearch = c.id.toLowerCase().includes(searchQuery.toLowerCase());
-        const matchesRegion = !selectedRegion || c.data.some((d) => d.region === selectedRegion);
-        return matchesSearch && matchesRegion;
-      })
-      .sort((a, b) => {
-        if (sortField === 'name') {
-          return sortOrder === 'asc' ? a.id.localeCompare(b.id) : b.id.localeCompare(a.id);
-        }
+    return countries.filter((c) => {
+      const matchesSearch = c.id.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesRegion = !selectedRegion || c.data.some((d) => d.region === selectedRegion);
+      return matchesSearch && matchesRegion;
+  });
+}, [countries, searchQuery, selectedRegion]);
 
-        const popA = getPopulationForYear(createYearDataMap(a.data), selectedYear) || 0;
-        const popB = getPopulationForYear(createYearDataMap(b.data), selectedYear) || 0;
-        return sortOrder === 'asc' ? popA - popB : popB - popA;
-      });
+const sortedCountries = useMemo(() => {
+  return [...filteredCountries].sort((a, b) => {
+    if (sortField === 'name') {
+      return sortOrder === 'asc' ? a.id.localeCompare(b.id) : b.id.localeCompare(a.id);
+    }
 
-    return filtered;
-  }, [countries, searchQuery, selectedRegion, sortField, sortOrder, selectedYear]);
+    const popA = getPopulationForYear(createYearDataMap(a.data), selectedYear) || 0;
+    const popB = getPopulationForYear(createYearDataMap(b.data), selectedYear) || 0;
+    return sortOrder === 'asc' ? popA - popB : popB - popA;
+  });
+}, [filteredCountries, sortField, sortOrder, selectedYear]);
 
   return (
     <div className={styles.countryList}>
       <List
-        style={{ width: '100%', height: Math.min(filteredCountries.length * 320, 720) }}
-        rowCount={filteredCountries.length}
+        style={{ width: '100%', height: Math.min(sortedCountries.length * 320, 720) }}
+        rowCount={sortedCountries.length}
         rowHeight={(_, rowProps) => 120 + rowProps.selectedColumns.length * 34}
         rowComponent={CountryRow}
         rowProps={{
-          countries: filteredCountries,
+          countries: sortedCountries,
           selectedYear,
           selectedColumns,
         }}

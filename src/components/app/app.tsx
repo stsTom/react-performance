@@ -8,21 +8,11 @@ import { getAvailableYears, getAvailableColumns } from '../../utils/data-transfo
 
 import styles from './app.module.css';
 
-type AppState = {
-  searchQuery: string;
-  selectedRegion: string;
-  selectedYear: number;
-  sortField: 'name' | 'population';
-  sortOrder: 'asc' | 'desc';
-  selectedColumns: string[];
-  isColumnModalOpen: boolean;
-};
-
 export const App = () => {
   const { data, isLoading, error } = useCo2Data();
 
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedRegion, setSelectedRegion] = useState('');
+  const [selectedRegion] = useState('');
   const [selectedYear, setSelectedYear] = useState(2020);
   const [sortField, setSortField] = useState<'name' | 'population'>('population');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');

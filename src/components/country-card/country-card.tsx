@@ -6,6 +6,7 @@ import {
   createYearDataMap,
 } from '../../utils/data-transformers';
 import { formatNumber } from '../../utils/format-utils';
+import { memo } from 'react';
 
 import styles from './country-card.module.css';
 
@@ -15,7 +16,7 @@ type CountryCardProps = {
   selectedColumns: string[];
 };
 
-export const CountryCard = ({ country, selectedYear, selectedColumns }: CountryCardProps) => {
+const CountryCard = memo(function CountryCard({ country, selectedYear, selectedColumns }: CountryCardProps) {
   const yearDataMap = createYearDataMap(country.data);
   const population = getPopulationForYear(yearDataMap, selectedYear);
   const co2 = getCo2ForYear(yearDataMap, selectedYear);
@@ -39,4 +40,6 @@ export const CountryCard = ({ country, selectedYear, selectedColumns }: CountryC
       <DataTable data={country.data} year={selectedYear} columns={selectedColumns} />
     </div>
   );
-};
+});
+
+export default CountryCard;
